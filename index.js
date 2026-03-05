@@ -84,6 +84,21 @@ app.delete('/reservar/:id', (req, res) => {
         res.send('Reserva cancelada com sucesso!');
     });
 });
+app.post("/login/", function (req, res){
+    const usuario = req.body.usuario
+    const senha = req.body.senha
+    conexao.query(`select * from usuarios where usuario = '${usuario}' and senha = '${senha}'`, function (erro, resultado, campos){
+        if (erro){
+            res.send(erro)
+        }else{
+            if (resultado.length > 0){
+                res.sendStatus(200)
+            }else{
+                res.sendStatus(401)
+            }
+        }
+    })
+})
 app.get('/reservar_lista', (req, res) => {
     const query = 'SELECT * FROM reservas';
     conexao.query(query, (err, results) => {
