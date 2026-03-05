@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestão de Frota</title>
+</head>
+<body>
+    <h2>Cadastrar Veículo</h2>
+    <form action="http://localhost:3000/veiculos" method="POST">
+        <input type="text" name="modelo" placeholder="Modelo ( Civic)" required>
+        <input type="text" name="marca" placeholder="Marca ( Honda)" required>
+        <input type="text" name="placa" placeholder="Placa" required>
+        <select name="categoria">
+            <option value="Sedan">Sedan</option>
+            <option value="SUV">SUV</option>
+            <option value="Hatch">Hatch</option>
+        </select>
+        <button type="submit">Cadastrar Carro</button>
+    </form>
+
+    <hr>
+    <h2>Veículos na Frota</h2>
+    <button onclick="listarVeiculos()">Atualizar Lista</button>
+    <ul id="lista-veiculos"></ul>
+
+    <script>
+        function listarVeiculos() {
+            fetch('http://localhost:3000/veiculos')
+                .then(response => response.json())
+                .then(data => {
+                    const lista = document.getElementById('lista-veiculos');
+                    lista.innerHTML = '';
+                    data.forEach(carro => {
+                        lista.innerHTML += `<li>${carro.marca} ${carro.modelo} - Placa: ${carro.placa} (${carro.categoria})</li>`;
+                    });
+                });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<h2>Gestão de Reservas</h2>
+<button onclick="carregarReservas()">Atualizar Lista de Reservas</button>
+<table border="1" id="tabela-reservas" style="width: 100%; margin-top: 20px;">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Categoria</th>
+            <th>Ação</th>
+        </tr>
+    </thead>
+    <tbody id="corpo-tabela"></tbody>
+</table>
+
+<script>
+    function carregarReservas() {
+        fetch('http://localhost:3000/reservar_lista') // Você precisará criar uma rota GET para listar reservas também
+            .then(res => res.json())
+            .then(dados => {
+                const corpo = document.getElementById('corpo-tabela');
+                corpo.innerHTML = '';
+                dados.forEach(reserva => {
+                    corpo.innerHTML += `
+                        <tr>
+                            <td>${reserva.id}</td>
+                            <td>${reserva.nome}</td>
+                            <td>${reserva.categoria}</td>
+                            <td>
+                                <button onclick="cancelarReserva(${reserva.id})">❌ Cancelar</button>
+                            </td>
+                        </tr>`;
+                });
+            });
+    }
+
+    function cancelarReserva(id) {
+        if(confirm('Tem certeza que deseja cancelar esta reserva?')) {
+            fetch(`http://localhost:3000/reservar/${id}`, { method: 'DELETE' })
+                .then(res => {
+                    if(res.ok) {
+                        alert('Reserva excluída!');
+                        carregarReservas(); // Atualiza a lista
+                    }
+                });
+        }
+    }
+</script>
